@@ -9,3 +9,4 @@ __pycache__/
 !.env.example
 db.sqlite3
 staticfiles/
+daily_push.py
