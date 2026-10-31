@@ -1,0 +1,228 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PARKEASE | Occupancy Report</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/occupancy_report.css' %}">
+</head>
+
+<body class="occupancy-page">
+
+    <header class="occupancy-topbar">
+        <a href="{% url 'admin_dashboard' %}" class="occupancy-brand">
+            <span class="occupancy-brand-mark">P</span>
+            PARKEASE<span class="brand-dot">.</span>
+        </a>
+
+        <div class="occupancy-topbar-right">
+            <span class="admin-label">ADMIN CONSOLE</span>
+            <a href="{% url 'admin_dashboard' %}" class="dashboard-link">
+                ← Dashboard
+            </a>
+        </div>
+    </header>
+
+    <main class="occupancy-container">
+
+        <section class="occupancy-heading">
+            <div>
+                <p class="eyebrow">PARKING ANALYTICS / REPORT 01</p>
+                <h1>Occupancy Report<span>.</span></h1>
+                <p>
+                    Review parking availability, occupied spaces, and
+                    floor-level operational occupancy.
+                </p>
+            </div>
+
+            <div class="report-tag">
+                <span class="report-tag-dot"></span>
+                PARKING OVERVIEW
+            </div>
+        </section>
+
+        <section class="overall-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SYSTEM-WIDE METRICS</p>
+                    <h2>Overall Parking Statistics</h2>
+                </div>
+                <span class="section-caption">ALL FLOORS</span>
+            </div>
+
+            <div class="occupancy-stats-grid">
+
+                <article class="occupancy-stat-card stat-total">
+                    <span class="stat-label">TOTAL PARKING SLOTS</span>
+                    <strong>{{ total_slots }}</strong>
+                    <span class="stat-description">Configured spaces</span>
+                    <div class="stat-line"></div>
+                </article>
+
+                <article class="occupancy-stat-card">
+                    <span class="stat-label">AVAILABLE</span>
+                    <strong>{{ available_slots }}</strong>
+                    <span class="stat-description">Marked available</span>
+                    <div class="stat-line"></div>
+                </article>
+
+                <article class="occupancy-stat-card">
+                    <span class="stat-label">OCCUPIED</span>
+                    <strong>{{ occupied_slots }}</strong>
+                    <span class="stat-description">Marked occupied</span>
+                    <div class="stat-line"></div>
+                </article>
+
+                <article class="occupancy-stat-card">
+                    <span class="stat-label">RESERVED</span>
+                    <strong>{{ reserved_slots }}</strong>
+                    <span class="stat-description">Marked reserved</span>
+                    <div class="stat-line"></div>
+                </article>
+
+                <article class="occupancy-stat-card">
+                    <span class="stat-label">MAINTENANCE</span>
+                    <strong>{{ maintenance_slots }}</strong>
+                    <span class="stat-description">Not operational</span>
+                    <div class="stat-line"></div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="occupancy-summary">
+            <div class="summary-copy">
+                <p class="eyebrow">CURRENT OPERATIONAL OCCUPANCY</p>
+                <h2>Parking Utilization</h2>
+                <p>
+                    Percentage of operational parking spaces currently
+                    occupied, as calculated by the report.
+                </p>
+            </div>
+
+            <div class="occupancy-meter">
+                <div class="meter-value">
+                    <strong>{{ occupancy_percentage }}%</strong>
+                    <span>OCCUPANCY</span>
+                </div>
+
+                <div class="meter-track"
+                     role="progressbar"
+                     aria-label="Operational parking occupancy"
+                     aria-valuemin="0"
+                     aria-valuemax="100"
+                     aria-valuenow="{{ occupancy_percentage }}">
+                    <div class="meter-fill"
+                         style="width: {% if occupancy_percentage > 100 %}100{% elif occupancy_percentage < 0 %}0{% else %}{{ occupancy_percentage }}{% endif %}%;">
+                    </div>
+                </div>
+
+                <div class="meter-scale">
+                    <span>0%</span>
+                    <span>50%</span>
+                    <span>100%</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="floor-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">DETAILED BREAKDOWN</p>
+                    <h2>Floor-wise Occupancy</h2>
+                </div>
+                <span class="section-caption">FLOOR REPORTS</span>
+            </div>
+
+            <div class="floor-report-list">
+
+                {% for floor in floor_reports %}
+                    <article class="floor-report-card">
+
+                        <div class="floor-report-heading">
+                            <div class="floor-title-group">
+                                <div class="floor-icon">F</div>
+                                <div>
+                                    <span class="floor-kicker">PARKING FLOOR</span>
+                                    <h3>{{ floor.name }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="floor-occupancy-value">
+                                <strong>{{ floor.occupancy_percentage }}%</strong>
+                                <span>OCCUPIED</span>
+                            </div>
+                        </div>
+
+                        <div class="floor-meter-track"
+                             role="progressbar"
+                             aria-label="{{ floor.name }} occupancy"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             aria-valuenow="{{ floor.occupancy_percentage }}">
+                            <div class="floor-meter-fill"
+                                 style="width: {% if floor.occupancy_percentage > 100 %}100{% elif floor.occupancy_percentage < 0 %}0{% else %}{{ floor.occupancy_percentage }}{% endif %}%;">
+                            </div>
+                        </div>
+
+                        <div class="floor-stats-grid">
+
+                            <div class="floor-stat">
+                                <span>TOTAL SLOTS</span>
+                                <strong>{{ floor.total_slots }}</strong>
+                            </div>
+
+                            <div class="floor-stat">
+                                <span>AVAILABLE</span>
+                                <strong>{{ floor.available_slots }}</strong>
+                            </div>
+
+                            <div class="floor-stat">
+                                <span>OCCUPIED</span>
+                                <strong>{{ floor.occupied_slots }}</strong>
+                            </div>
+
+                            <div class="floor-stat">
+                                <span>RESERVED</span>
+                                <strong>{{ floor.reserved_slots }}</strong>
+                            </div>
+
+                            <div class="floor-stat">
+                                <span>MAINTENANCE</span>
+                                <strong>{{ floor.maintenance_slots }}</strong>
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% empty %}
+                    <div class="occupancy-empty">
+                        <div class="empty-symbol">F</div>
+                        <h3>No parking floors configured</h3>
+                        <p>
+                            Add parking floors and their slots before generating
+                            floor-wise occupancy reports.
+                        </p>
+                        <a href="/admin/">Open Django Admin ↗</a>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </section>
+
+        <footer class="occupancy-footer">
+            <span>PARKEASE © 2026</span>
+            <span>SMART MALL PARKING PLATFORM</span>
+            <a href="{% url 'admin_dashboard' %}">Back to Dashboard ↑</a>
+        </footer>
+
+    </main>
+
+</body>
+</html>

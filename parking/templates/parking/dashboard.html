@@ -1,0 +1,162 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | Dashboard</title>
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/dashboard.css' %}">
+</head>
+
+<body class="dashboard-page">
+
+    <header class="dashboard-header">
+        <a href="{% url 'dashboard' %}" class="brand">
+            <span class="brand-mark">P.</span>
+            <span>PARKEASE</span>
+        </a>
+
+        <nav class="dashboard-nav">
+            <a href="{% url 'parking_slots' %}">Parking Slots</a>
+            <a href="{% url 'my_bookings' %}">My Bookings</a>
+            <a href="{% url 'my_vehicles' %}">My Vehicles</a>
+            <a href="{% url 'logout' %}" class="nav-logout">Logout ↗</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-main">
+
+        <section class="dashboard-welcome">
+            <div>
+                <p class="eyebrow">PARKEASE / USER CONSOLE</p>
+                <h1>Welcome back,<br><span>{{ user.username }}.</span></h1>
+                <p class="welcome-description">
+                    Your parking, your vehicles, all in one place.
+                </p>
+            </div>
+
+            <div class="welcome-status">
+                <span class="status-dot"></span>
+                SYSTEM ONLINE
+            </div>
+        </section>
+
+        {% if messages %}
+            <section class="dashboard-messages">
+                {% for message in messages %}
+                    <p class="dashboard-message">{{ message }}</p>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        <section class="account-panel">
+            <div class="panel-label">
+                <span class="panel-index">01</span>
+                <span>ACCOUNT INFORMATION</span>
+            </div>
+
+            <div class="account-details">
+                <div>
+                    <p class="detail-label">USERNAME</p>
+                    <p class="detail-value">{{ user.username }}</p>
+                </div>
+
+                <div>
+                    <p class="detail-label">EMAIL ADDRESS</p>
+                    <p class="detail-value">
+                        {% if user.email %}
+                            {{ user.email }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="detail-label">ACCOUNT STATUS</p>
+                    <p class="detail-value">
+                        <span class="account-status">ACTIVE</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR WORKSPACE / 02</p>
+                    <h2>Parking management.</h2>
+                </div>
+                <span class="section-count">04 MODULES</span>
+            </div>
+
+            <div class="dashboard-grid">
+
+                <a href="{% url 'parking_slots' %}" class="dashboard-card">
+                    <div class="card-top">
+                        <span class="card-number">01 / PARKING</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <div class="card-icon">[P]</div>
+                    <h3>Find a parking slot</h3>
+                    <p>Explore parking floors and check slot availability.</p>
+                    <span class="card-link">Explore slots →</span>
+                </a>
+
+                <a href="{% url 'my_bookings' %}" class="dashboard-card">
+                    <div class="card-top">
+                        <span class="card-number">02 / BOOKINGS</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <div class="card-icon">[B]</div>
+                    <h3>My bookings</h3>
+                    <p>Review reservations and track booking status.</p>
+                    <span class="card-link">View bookings →</span>
+                </a>
+
+                <a href="{% url 'my_vehicles' %}" class="dashboard-card">
+                    <div class="card-top">
+                        <span class="card-number">03 / VEHICLES</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <div class="card-icon">[V]</div>
+                    <h3>My vehicles</h3>
+                    <p>Manage the vehicles linked to your account.</p>
+                    <span class="card-link">Manage vehicles →</span>
+                </a>
+
+                <a href="{% url 'book_slot' %}" class="dashboard-card">
+                    <div class="card-top">
+                        <span class="card-number">04 / RESERVATION</span>
+                        <span class="card-arrow">↗</span>
+                    </div>
+                    <div class="card-icon">[+]</div>
+                    <h3>Book a slot</h3>
+                    <p>Continue to the reservation form and choose your slot.</p>
+                    <span class="card-link">Start booking →</span>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="dashboard-bottom">
+            <div>
+                <p class="eyebrow">NEED TO LEAVE?</p>
+                <h3>End your session securely.</h3>
+                <p>Log out of your PARKEASE account on this device.</p>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-button">Logout ↗</a>
+        </section>
+
+    </main>
+
+    <footer class="dashboard-footer">
+        <span>PARKEASE © 2026</span>
+        <span>SMART MALL PARKING PLATFORM</span>
+        <span>USER CONSOLE / 01</span>
+    </footer>
+
+</body>
+</html>

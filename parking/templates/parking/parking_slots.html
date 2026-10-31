@@ -1,0 +1,391 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | Parking Slots</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/parking_slots.css' %}">
+</head>
+
+<body class="parking-page">
+
+    <!-- Header -->
+    <header class="parking-header">
+        <a href="{% url 'dashboard' %}" class="brand">
+            <span class="brand-mark">P.</span>
+            <span>PARKEASE</span>
+        </a>
+
+        <nav class="parking-nav">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'my_bookings' %}">My Bookings</a>
+            <a href="{% url 'my_vehicles' %}">My Vehicles</a>
+        </nav>
+    </header>
+
+    <main class="parking-main">
+
+        <!-- Hero -->
+        <section class="parking-hero">
+            <p class="eyebrow">SMART MALL PARKING / 03</p>
+
+            <h1>Find your<br><span>parking space.</span></h1>
+
+            <p class="hero-description">
+                Explore floors, check availability and reserve your slot.
+            </p>
+
+            <div class="parking-system-status">
+                <span class="status-dot"></span>
+                PARKING SYSTEM
+                <span class="status-separator">/</span>
+                LIVE SLOT DATA
+            </div>
+        </section>
+
+        <!-- Availability Search -->
+        <section class="availability-panel">
+            <div class="section-topline">
+                <span class="section-index">01</span>
+                <span>AVAILABILITY SEARCH</span>
+            </div>
+
+            <h2>Plan your parking.</h2>
+
+            <p class="panel-description">
+                Select your expected arrival and departure times.
+            </p>
+
+            <form method="GET"
+                  action="{% url 'parking_slots' %}"
+                  class="availability-form">
+
+                <div class="search-field">
+                    <label for="start_time">Arrival time</label>
+                    <input
+                        type="datetime-local"
+                        id="start_time"
+                        name="start_time"
+                        value="{{ start_time }}"
+                        required>
+                </div>
+
+                <div class="search-field">
+                    <label for="end_time">Departure time</label>
+                    <input
+                        type="datetime-local"
+                        id="end_time"
+                        name="end_time"
+                        value="{{ end_time }}"
+                        required>
+                </div>
+
+                <button type="submit" class="search-button">
+                    Check Availability <span>→</span>
+                </button>
+            </form>
+
+            {% if error %}
+                <div class="parking-error" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Parking Floors -->
+        <section class="slots-section">
+
+            <!-- Section Heading -->
+            <div class="slots-heading">
+                <div>
+                    <p class="eyebrow">MALL DIRECTORY / 02</p>
+                    <h2>Parking floors.</h2>
+                </div>
+
+                <span class="floor-label">FLOOR BY FLOOR</span>
+            </div>
+
+            <!-- Single Unified Availability Prediction -->
+            
+<!-- Single Unified Availability Prediction -->
+<section class="availability-panel next-availability-panel">
+
+    <div class="section-topline">
+        <span class="section-index">03</span>
+        <span>NEXT SLOT AVAILABILITY</span>
+    </div>
+
+    <h2>When will a slot open?</h2>
+
+    <p class="panel-description">
+        Live sensor status and ML-based parking duration estimates.
+    </p>
+
+    {% if next_availability.status == 'available_now' %}
+
+        <p class="mini-label">LIVE SENSOR STATUS</p>
+        <h3>Available now</h3>
+
+        <p class="prediction-caption">
+            {{ next_availability.message }}
+        </p>
+
+        {% if next_availability.slot_number %}
+            <div class="release-time">
+                <span>AVAILABLE SLOT</span>
+                <strong>{{ next_availability.slot_number }}</strong>
+            </div>
+        {% endif %}
+
+    {% elif next_availability.status == 'ml_estimate' %}
+
+        <p class="mini-label">ML-PREDICTED WAIT</p>
+
+        <p class="prediction-time">
+            {% if next_availability.remaining_hours > 0 %}
+                {{ next_availability.remaining_hours }} hr
+                {% if next_availability.remaining_remainder_minutes > 0 %}
+                    {{ next_availability.remaining_remainder_minutes }} min
+                {% endif %}
+            {% else %}
+                {{ next_availability.remaining_minutes }} min
+            {% endif %}
+        </p>
+
+        <p class="prediction-caption">
+            {{ next_availability.message }}
+        </p>
+
+        {% if next_availability.slot_number %}
+            <div class="release-time">
+                <span>PREDICTED SLOT</span>
+                <strong>{{ next_availability.slot_number }}</strong>
+            </div>
+        {% endif %}
+
+        {% if next_availability.estimated_release_time %}
+            <div class="release-time">
+                <span>ESTIMATED RELEASE</span>
+                <strong>
+                    {{ next_availability.estimated_release_time|date:"h:i A" }}
+                </strong>
+            </div>
+        {% endif %}
+
+        <p class="prediction-caption">
+            This is an estimate, not a guaranteed departure time.
+        </p>
+
+    {% elif next_availability.status == 'no_slots' %}
+
+        <p class="mini-label">SYSTEM STATUS</p>
+        <h3>No slots configured</h3>
+
+        <p class="prediction-caption">
+            {{ next_availability.message }}
+        </p>
+
+    {% else %}
+
+        <p class="mini-label">ML STATUS / COLLECTING DATA</p>
+        <h3>Prediction unavailable</h3>
+
+        <p class="prediction-caption">
+            {{ next_availability.message|default:"ML prediction is unavailable until sufficient genuine parking history is collected." }}
+        </p>
+
+        <div class="release-time">
+            <span>MODEL STATUS</span>
+            <strong>AWAITING DATA</strong>
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+            <!-- Floor List -->
+            {% for floor in floors %}
+
+                <section class="floor-panel">
+
+                    <div class="floor-heading">
+                        <div class="floor-number">
+                            {{ floor.floor_number|stringformat:"02d" }}
+                        </div>
+
+                        <div>
+                            <h3>{{ floor.name }}</h3>
+                            <p>Floor {{ floor.floor_number }}</p>
+                        </div>
+                    </div>
+
+                    <div class="slot-grid">
+
+                        {% for slot in floor.slots.all %}
+
+                            <article class="slot-card">
+
+                                <div class="slot-card-top">
+                                    <span class="slot-id">
+                                        SLOT / {{ slot.slot_number }}
+                                    </span>
+
+                                    <span class="slot-indicator"></span>
+                                </div>
+
+                                <h4>{{ slot.slot_number }}</h4>
+
+                                <!-- Availability for selected time -->
+                                {% if available_slot_ids != None %}
+
+                                    {% if error %}
+
+                                        <div class="slot-status status-unknown">
+                                            Availability unchecked
+                                        </div>
+
+                                    {% elif slot.id in available_slot_ids %}
+
+                                        <div class="slot-status status-available">
+                                            Available for selected time
+                                        </div>
+
+                                        <a class="slot-book-button"
+                                           href="{% url 'book_slot' %}?slot={{ slot.id }}&start_time={{ start_time|urlencode }}&end_time={{ end_time|urlencode }}">
+                                            Book this slot <span>↗</span>
+                                        </a>
+
+                                    {% else %}
+
+                                        <div class="slot-status status-unavailable">
+                                            Not available for selected time
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <!-- Live sensor status -->
+                                    <div class="slot-status
+                                        {% if slot.live_status == 'AVAILABLE' %}
+                                            status-available
+                                        {% elif slot.live_status == 'OCCUPIED' %}
+                                            status-unavailable
+                                        {% elif slot.live_status == 'RESERVED' %}
+                                            status-reserved
+                                        {% else %}
+                                            status-unknown
+                                        {% endif %}">
+
+                                        {% if slot.live_status == 'UNKNOWN' %}
+
+                                            Occupancy unconfirmed
+
+                                        {% elif slot.live_status == 'OCCUPIED' %}
+
+                                            Vehicle detected
+
+                                        {% elif slot.live_status == 'AVAILABLE' %}
+
+                                            Sensor confirms no vehicle detected
+
+                                        {% else %}
+
+                                            {{ slot.get_status_display }}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    {% if slot.live_status == 'AVAILABLE' %}
+                                        <a class="slot-book-button"
+                                           href="{% url 'book_slot' %}?slot={{ slot.id }}">
+                                            Book this slot <span>↗</span>
+                                        </a>
+                                    {% endif %}
+
+                                {% endif %}
+
+                                <!-- IoT Sensor Information -->
+                                <div class="sensor-panel">
+                                    <span class="sensor-icon">IoT</span>
+
+                                    <div>
+                                        <p class="mini-label">SENSOR STATUS</p>
+
+                                        {% if slot.iot_sensor %}
+
+                                            {% if slot.iot_sensor.state == 'DETECTED' %}
+
+                                                <p class="sensor-value">
+                                                    Vehicle detected
+                                                </p>
+
+                                            {% elif slot.iot_sensor.state == 'CLEAR' %}
+
+                                                <p class="sensor-value">
+                                                    No vehicle detected
+                                                </p>
+
+                                            {% else %}
+
+                                                <p class="sensor-value">
+                                                    Waiting for sensor data
+                                                </p>
+
+                                            {% endif %}
+
+                                        {% else %}
+
+                                            <p class="sensor-value">
+                                                No sensor registered
+                                            </p>
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </article>
+
+                        {% empty %}
+
+                            <p class="empty-message">
+                                No parking slots have been added to this floor yet.
+                            </p>
+
+                        {% endfor %}
+
+                    </div>
+                </section>
+
+            {% empty %}
+
+                <div class="empty-floors">
+                    <h3>No parking floors available.</h3>
+                    <p>Please check again later.</p>
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+        <div class="parking-back">
+            <a href="{% url 'dashboard' %}">← Back to dashboard</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="parking-footer">
+        <span>PARKEASE © 2026</span>
+        <span>SMART MALL PARKING PLATFORM</span>
+        <span>SLOTS / 03</span>
+    </footer>
+
+</body>
+</html>

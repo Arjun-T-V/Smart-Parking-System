@@ -1,0 +1,199 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PARKEASE | Booking Management</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/admin_bookings.css' %}">
+</head>
+
+<body class="admin-bookings-page">
+
+    <header class="ab-topbar">
+        <a href="{% url 'admin_dashboard' %}" class="ab-brand">
+            <span class="ab-brand-mark">P</span>
+            PARKEASE<span class="ab-brand-dot">.</span>
+        </a>
+
+        <div class="ab-topbar-right">
+            <span class="ab-admin-label">ADMIN CONSOLE</span>
+            <div class="ab-user">
+                <span class="ab-avatar">{{ request.user.username|first|upper }}</span>
+                <span>{{ request.user.username }}</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="ab-container">
+
+        <div class="ab-breadcrumb">
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+            <span>/</span>
+            <span>Booking Management</span>
+        </div>
+
+        <section class="ab-heading">
+            <div>
+                <p class="ab-eyebrow">RESERVATION CONTROL</p>
+                <h1>Booking Management<span>.</span></h1>
+                <p>
+                    Search reservations, review customer details, and manage
+                    confirmed bookings.
+                </p>
+            </div>
+
+            <a href="{% url 'admin_dashboard' %}" class="ab-back-link">
+                ← Admin Dashboard
+            </a>
+        </section>
+
+        <section class="ab-search-panel">
+            <div class="ab-search-heading">
+                <div>
+                    <p class="ab-eyebrow">FIND A RESERVATION</p>
+                    <h2>Search Bookings</h2>
+                </div>
+                <span class="ab-search-icon">⌕</span>
+            </div>
+
+            <form method="GET" class="ab-search-form">
+                <div class="ab-search-field">
+                    <label for="search">Username or Vehicle Number</label>
+                    <input
+                        type="text"
+                        id="search"
+                        name="search"
+                        value="{{ search|default:'' }}"
+                        placeholder="e.g. customer name or KL 01 AB 1234"
+                    >
+                </div>
+
+                <button type="submit" class="ab-search-button">
+                    Search <span>↗</span>
+                </button>
+
+                <a href="{% url 'admin_bookings' %}" class="ab-clear-button">
+                    Clear
+                </a>
+            </form>
+        </section>
+
+        <section class="ab-results-section">
+            <div class="ab-results-heading">
+                <div>
+                    <p class="ab-eyebrow">RESERVATION DATABASE</p>
+                    <h2>All Bookings</h2>
+                </div>
+
+                <span class="ab-results-label">BOOKING RECORDS</span>
+            </div>
+
+            {% for booking in bookings %}
+                <article class="ab-booking-card">
+
+                    <div class="ab-card-heading">
+                        <div>
+                            <span class="ab-detail-label">BOOKING REFERENCE</span>
+                            <h3>#{{ booking.id }}</h3>
+                        </div>
+
+                        <span class="ab-status
+                            {% if booking.status == 'CONFIRMED' %}
+                                ab-status-confirmed
+                            {% elif booking.status == 'PENDING' %}
+                                ab-status-pending
+                            {% elif booking.status == 'CANCELLED' %}
+                                ab-status-cancelled
+                            {% elif booking.status == 'COMPLETED' %}
+                                ab-status-completed
+                            {% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="ab-booking-grid">
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">CUSTOMER</span>
+                            <strong>{{ booking.user.username }}</strong>
+                        </div>
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">VEHICLE NUMBER</span>
+                            <strong>{{ booking.vehicle_number }}</strong>
+                        </div>
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">PARKING FLOOR</span>
+                            <strong>{{ booking.slot.floor.name }}</strong>
+                        </div>
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">SLOT NUMBER</span>
+                            <strong>{{ booking.slot.slot_number }}</strong>
+                        </div>
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">START TIME</span>
+                            <strong>{{ booking.start_time|date:"d M Y, h:i A" }}</strong>
+                        </div>
+
+                        <div class="ab-detail">
+                            <span class="ab-detail-label">END TIME</span>
+                            <strong>{{ booking.end_time|date:"d M Y, h:i A" }}</strong>
+                        </div>
+
+                    </div>
+
+                    {% if booking.status == 'CONFIRMED' %}
+                        <div class="ab-card-actions">
+                            <span>MANAGEMENT ACTIONS</span>
+
+                            <form method="POST"
+                                  action="{% url 'admin_cancel_booking' booking.id %}"
+                                  onsubmit="return confirm('Cancel booking #{{ booking.id }}?');">
+                                {% csrf_token %}
+                                <button type="submit" class="ab-cancel-button">
+                                    Cancel Booking <span>×</span>
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+
+                </article>
+
+            {% empty %}
+                <div class="ab-empty-state">
+                    <div class="ab-empty-icon">⌕</div>
+                    <h3>No bookings found</h3>
+
+                    {% if search %}
+                        <p>
+                            No reservations match your search for
+                            <strong>{{ search }}</strong>.
+                            Try another username or vehicle number.
+                        </p>
+                        <a href="{% url 'admin_bookings' %}" class="ab-search-button">
+                            View All Bookings
+                        </a>
+                    {% else %}
+                        <p>Booking records will appear here when reservations are created.</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+
+        <footer class="ab-footer">
+            <span>PARKEASE © 2026</span>
+            <span>BOOKING MANAGEMENT / ADMIN CONSOLE</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>

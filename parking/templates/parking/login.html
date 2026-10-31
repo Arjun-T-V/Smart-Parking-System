@@ -1,0 +1,115 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | Login</title>
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/login.css' %}">
+</head>
+
+<body class="login-page">
+
+    <header class="login-header">
+        <a href="{% url 'home' %}" class="brand">
+            <span class="brand-mark">P.</span>
+            <span>PARKEASE</span>
+        </a>
+        <span class="system-label">PARKING MANAGEMENT SYSTEM</span>
+    </header>
+
+    <main class="login-layout">
+
+        <section class="login-intro">
+            <p class="eyebrow">SMART PARKING / 01</p>
+
+            <h1>Parking.<br>Made <span>Simple.</span></h1>
+
+            <p class="intro-description">
+                A smarter way to find, reserve and manage your parking space.
+                Your journey starts here.
+            </p>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>SYSTEM ONLINE</span>
+                <span class="status-divider">/</span>
+                <span>PARKEASE V1.0</span>
+            </div>
+        </section>
+
+        <section class="login-card">
+
+            <div class="card-heading">
+                <p class="eyebrow">ACCOUNT ACCESS</p>
+                <h2>Welcome back.</h2>
+                <p>Enter your credentials to continue.</p>
+            </div>
+
+            {% if error %}
+                <div class="login-error" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="login-message" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-field">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="login-submit">
+                    <span>Sign In</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <div class="register-prompt">
+                <span>New to PARKEASE?</span>
+                <a href="{% url 'register' %}">Create an account ↗</a>
+            </div>
+
+            <a href="{% url 'home' %}" class="back-link">← Back to home</a>
+
+        </section>
+    </main>
+
+    <footer class="login-footer">
+        <span>PARKEASE © 2026</span>
+        <span>DESIGNED FOR BETTER PARKING.</span>
+    </footer>
+
+</body>
+</html>

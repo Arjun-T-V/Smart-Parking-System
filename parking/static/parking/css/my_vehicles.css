@@ -1,0 +1,177 @@
+/* my_vehicles.css — Cyber-Telemetry
+   Registration numbers are bright number plates against the dark UI. */
+
+.vehicles-container {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 64px) 0 0;
+}
+
+.vehicles-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.vehicles-heading h1 { font-size: clamp(2.5rem, 5.4vw, 4.2rem); letter-spacing: -0.05em; }
+.subtitle { max-width: 48ch; margin-top: 14px; font-size: 1.04rem; color: var(--muted); }
+
+.vehicle-total {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    min-width: 128px;
+    padding: 14px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.vehicle-total strong { font-size: 2.6rem; color: var(--cyan-hi); text-shadow: 0 0 24px var(--cyan-glow); }
+
+.vehicle-messages { display: grid; gap: 10px; margin-top: 24px; }
+.vehicle-error { margin-top: 24px; }
+
+.vehicles-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* ---------- Form ---------- */
+
+.vehicle-form-panel {
+    position: sticky;
+    top: 96px;
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: 20px;
+}
+
+.vehicle-form-panel h2 { font-size: 1.55rem; }
+.panel-description { margin: 8px 0 24px; font-size: 0.95rem; color: var(--muted); }
+
+.vehicle-form { display: grid; gap: 20px; }
+
+#vehicle_number {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+#vehicle_number::placeholder { font-weight: 400; letter-spacing: 0.02em; text-transform: none; }
+
+.save-vehicle-button { width: 100%; min-height: 50px; justify-content: space-between; }
+
+.form-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    font-size: 0.84rem;
+    color: var(--faint);
+}
+
+.note-indicator {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* ---------- Garage ---------- */
+
+.registered-heading { margin-bottom: 20px; }
+
+.garage-count {
+    display: grid;
+    place-items: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 10px;
+    border: 1px solid rgba(6, 182, 212, 0.55);
+    border-radius: var(--r);
+    background: var(--cyan-soft);
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.2);
+    color: var(--cyan-hi);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.vehicle-card {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 12px;
+    padding: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.vehicle-card:hover { border-color: rgba(6, 182, 212, 0.55); box-shadow: 0 0 16px rgba(6, 182, 212, 0.16); }
+
+.vehicle-icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    border-radius: 14px;
+    background: var(--cyan-soft);
+    color: var(--cyan-hi);
+}
+
+.vehicle-icon svg { width: 36px; height: 36px; }
+
+/* number plate */
+.vehicle-info h3 {
+    display: inline-block;
+    margin: 6px 0 8px;
+    padding: 3px 12px;
+    border: 2px solid #0f172a;
+    border-radius: 6px;
+    background: var(--text);
+    box-shadow: 0 0 0 1px var(--line-strong);
+    color: #0f172a;
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
+}
+
+.vehicle-info p { font-size: 0.84rem; color: var(--faint); }
+
+.vehicle-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--ok);
+}
+
+.vehicles-footer { margin-top: 64px; padding-left: 0; padding-right: 0; }
+
+@media (max-width: 920px) {
+    .vehicles-layout { grid-template-columns: 1fr; }
+    .vehicle-form-panel { position: static; }
+}
+
+@media (max-width: 520px) {
+    .vehicle-card { grid-template-columns: 56px minmax(0, 1fr); gap: 14px; }
+    .vehicle-icon { width: 56px; height: 56px; }
+    .vehicle-icon svg { width: 32px; height: 32px; }
+    .vehicle-status { grid-column: 1 / -1; }
+}

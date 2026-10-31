@@ -1,0 +1,173 @@
+/* book_slot.css — Cyber-Telemetry */
+
+.booking-main {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 64px) 0 clamp(40px, 6vw, 72px);
+}
+
+.booking-intro h1 { font-size: clamp(2.6rem, 5.6vw, 4.4rem); line-height: 1; letter-spacing: -0.05em; }
+
+.booking-intro > p:last-child { max-width: 48ch; margin-top: 18px; font-size: 1.06rem; color: var(--muted); }
+
+.booking-alert { margin-top: 24px; }
+
+.booking-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    align-items: start;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+/* ---------- Form card ---------- */
+
+.booking-form-card {
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: 20px;
+}
+
+.booking-card-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+}
+
+.step-number {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    border-radius: var(--r);
+    background: var(--cyan-soft);
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.2);
+    color: var(--cyan-hi);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.booking-card-heading h2 { font-size: 1.4rem; }
+.booking-card-heading p { margin-top: 2px; font-size: 0.92rem; color: var(--muted); }
+
+.reservation-form { display: grid; gap: 22px; }
+.booking-time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.booking-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    border-radius: var(--r);
+    background: var(--cyan-soft);
+    color: #cdeff5;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.notice-symbol {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: var(--cyan);
+    color: #04222a;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.booking-submit { width: 100%; min-height: 54px; justify-content: space-between; }
+
+.demo-note {
+    margin-top: -6px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+}
+
+/* ---------- Info panel ---------- */
+
+.booking-info {
+    position: sticky;
+    top: 96px;
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: 20px;
+}
+
+.info-topline { display: flex; align-items: center; justify-content: space-between; }
+.booking-info .eyebrow { margin-bottom: 0; }
+
+.info-symbol {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--cyan-hi);
+    text-shadow: 0 0 18px var(--cyan-glow);
+}
+
+.booking-info h2 { margin: 20px 0 24px; font-size: clamp(1.6rem, 2.4vw, 2rem); }
+
+.booking-step {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+}
+
+.booking-step > span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cyan);
+}
+
+.booking-step h3 { font-size: 1.02rem; }
+.booking-step p { margin-top: 2px; font-size: 0.88rem; color: var(--muted); }
+
+.pricing-note {
+    margin-top: 12px;
+    padding: 20px;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    background: rgba(10, 16, 32, 0.55);
+}
+
+.pricing-note .eyebrow { margin-bottom: 8px; }
+
+.price { margin: 4px 0 8px; font-size: 2.8rem; color: var(--cyan-hi); text-shadow: 0 0 24px var(--cyan-glow); }
+
+.price span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--muted);
+    text-shadow: none;
+}
+
+.pricing-note > p:last-child { font-size: 0.86rem; color: var(--muted); }
+
+.booking-main > .back-link { margin-top: 32px; }
+
+@media (max-width: 920px) {
+    .booking-layout { grid-template-columns: 1fr; }
+    .booking-info { position: static; }
+}
+
+@media (max-width: 520px) {
+    .booking-time-grid { grid-template-columns: 1fr; }
+}

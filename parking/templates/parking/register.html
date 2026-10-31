@@ -1,0 +1,127 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | Create Account</title>
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/register.css' %}">
+</head>
+
+<body class="register-page">
+
+    <header class="register-header">
+        <a href="{% url 'home' %}" class="brand">
+            <span class="brand-mark">P.</span>
+            <span>PARKEASE</span>
+        </a>
+        <span class="system-label">SMART PARKING / USER REGISTRATION</span>
+    </header>
+
+    <main class="register-layout">
+
+        <section class="register-intro">
+            <p class="eyebrow">YOUR JOURNEY STARTS HERE / 02</p>
+
+            <h1>One account.<br><span>Better parking.</span></h1>
+
+            <p class="intro-description">
+                Create your PARKEASE account to reserve parking slots,
+                manage your vehicles and keep track of your bookings.
+            </p>
+
+            <div class="register-features">
+                <div class="feature-item">
+                    <span class="feature-number">01</span>
+                    <div>
+                        <strong>Smart Reservations</strong>
+                        <p>Find and book available parking slots.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="feature-number">02</span>
+                    <div>
+                        <strong>Vehicle Management</strong>
+                        <p>Keep your registered vehicles in one place.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <span class="feature-number">03</span>
+                    <div>
+                        <strong>Booking Overview</strong>
+                        <p>Review your reservations and payment status.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="register-card">
+
+            <div class="card-heading">
+                <p class="eyebrow">NEW ACCOUNT</p>
+                <h2>Create account.</h2>
+                <p>Fill in your details to get started.</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="register-message" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="register-error" role="alert">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}">
+                            {{ field.label }}
+                        </label>
+
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <div class="field-help">{{ field.help_text|safe }}</div>
+                        {% endif %}
+
+                        {% for error in field.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="register-submit">
+                    <span>Create Account</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <div class="login-prompt">
+                <span>Already have an account?</span>
+                <a href="{% url 'login' %}">Sign in ↗</a>
+            </div>
+
+            <a href="{% url 'home' %}" class="back-link">← Back to home</a>
+
+        </section>
+    </main>
+
+    <footer class="register-footer">
+        <span>PARKEASE © 2026</span>
+        <span>DESIGNED FOR BETTER PARKING.</span>
+    </footer>
+
+</body>
+</html>

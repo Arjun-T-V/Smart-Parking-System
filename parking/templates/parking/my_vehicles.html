@@ -1,0 +1,179 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | My Vehicles</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/my_vehicles.css' %}">
+</head>
+
+<body class="vehicles-page">
+
+    <nav class="vehicles-nav">
+        <a href="{% url 'dashboard' %}" class="vehicles-brand">
+            PARKEASE<span>.</span>
+        </a>
+
+        <div class="vehicles-nav-links">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'parking_slots' %}">Parking Slots</a>
+            <a href="{% url 'my_bookings' %}">My Bookings</a>
+        </div>
+    </nav>
+
+    <main class="vehicles-container">
+
+        <section class="vehicles-heading">
+            <div>
+                <p class="eyebrow">VEHICLE MANAGEMENT</p>
+                <h1>My Vehicles<span>.</span></h1>
+                <p class="subtitle">
+                    Register and manage the vehicles you use for mall parking.
+                </p>
+            </div>
+
+            <div class="vehicle-total">
+                <span>REGISTERED</span>
+                <strong>{{ vehicles|length }}</strong>
+                <span>VEHICLES</span>
+            </div>
+        </section>
+
+        {% if messages %}
+            <div class="vehicle-messages">
+                {% for message in messages %}
+                    <div class="vehicle-message {{ message.tags }}" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="vehicle-message vehicle-error" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <div class="vehicles-layout">
+
+            <section class="vehicle-form-panel">
+                <p class="eyebrow">NEW REGISTRATION</p>
+                <h2>Add a Vehicle</h2>
+                <p class="panel-description">
+                    Enter your vehicle details to use them when booking a parking slot.
+                </p>
+
+                <form method="POST" class="vehicle-form">
+                    {% csrf_token %}
+
+                    <div class="form-field">
+                        <label for="vehicle_number">Vehicle Registration Number</label>
+                        <input
+                            type="text"
+                            id="vehicle_number"
+                            name="vehicle_number"
+                            maxlength="20"
+                            value="{{ vehicle_number|default:'' }}"
+                            placeholder="e.g. KL 01 AB 1234"
+                            autocomplete="off"
+                            required
+                        >
+                        <span class="field-hint">
+                            Enter the registration number shown on your vehicle.
+                        </span>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="vehicle_type">Vehicle Type</label>
+                        <select id="vehicle_type" name="vehicle_type" required>
+                            <option value="CAR">Car</option>
+                            <option value="BIKE">Bike</option>
+                            <option value="SUV">SUV</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="save-vehicle-button">
+                        Save Vehicle <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <div class="form-note">
+                    <span class="note-indicator"></span>
+                    Your registered vehicles are linked to your account.
+                </div>
+            </section>
+
+            <section class="registered-vehicles">
+                <div class="registered-heading">
+                    <div>
+                        <p class="eyebrow">YOUR GARAGE</p>
+                        <h2>Registered Vehicles</h2>
+                    </div>
+                    <span class="garage-count">{{ vehicles|length }}</span>
+                </div>
+
+                {% for vehicle in vehicles %}
+                    <article class="vehicle-card">
+
+                        <div class="vehicle-icon" aria-hidden="true">
+                            {% if vehicle.vehicle_type == 'BIKE' %}
+                                <svg viewBox="0 0 48 48" fill="none">
+                                    <circle cx="12" cy="33" r="7" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="36" cy="33" r="7" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 33L19 20H28L36 33M19 20L25 33H36M22 16H27M17 20H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            {% else %}
+                                <svg viewBox="0 0 48 48" fill="none">
+                                    <path d="M9 28L13 17H35L39 28V37H9V28Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M13 17L17 10H31L35 17M9 28H39" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <circle cx="16" cy="34" r="3" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="32" cy="34" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            {% endif %}
+                        </div>
+
+                        <div class="vehicle-info">
+                            <span class="vehicle-type-label">
+                                {{ vehicle.get_vehicle_type_display }}
+                            </span>
+                            <h3>{{ vehicle.vehicle_number }}</h3>
+                            <p>
+                                Registered:
+                                {{ vehicle.created_at|date:"d M Y" }}
+                            </p>
+                        </div>
+
+                        <span class="vehicle-status">
+                            <span></span> REGISTERED
+                        </span>
+
+                    </article>
+                {% empty %}
+                    <div class="empty-garage">
+                        <div class="empty-symbol">+</div>
+                        <h3>Your garage is empty</h3>
+                        <p>
+                            Add your first vehicle using the registration form.
+                            It will appear here once saved.
+                        </p>
+                    </div>
+                {% endfor %}
+            </section>
+
+        </div>
+
+        <footer class="vehicles-footer">
+            <span>PARKEASE © 2026</span>
+            <span>SMART MALL PARKING PLATFORM</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>

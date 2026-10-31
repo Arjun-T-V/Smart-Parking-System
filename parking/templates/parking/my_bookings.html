@@ -1,0 +1,189 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PARKEASE | My Bookings</title>
+
+    <link rel="stylesheet"
+          href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'parking/css/my_bookings.css' %}">
+</head>
+
+<body class="bookings-page">
+
+    <nav class="bookings-nav">
+        <a href="{% url 'dashboard' %}" class="brand">
+            PARKEASE<span>.</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'parking_slots' %}">Parking Slots</a>
+            <a href="{% url 'my_vehicles' %}">My Vehicles</a>
+        </div>
+    </nav>
+
+    <main class="bookings-container">
+
+        <section class="bookings-heading">
+            <div>
+                <p class="eyebrow">YOUR PARKING ACTIVITY</p>
+                <h1>My Bookings<span>.</span></h1>
+                <p class="subtitle">
+                    View your reservations, check their status,
+                    and manage your parking bookings.
+                </p>
+            </div>
+
+            <a href="{% url 'parking_slots' %}" class="primary-link">
+                + Book a Slot
+            </a>
+        </section>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}" role="status">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <section class="booking-list">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">RESERVATION HISTORY</p>
+                    <h2>Your Reservations</h2>
+                </div>
+                <span class="booking-count">BOOKINGS</span>
+            </div>
+
+            {% for booking in bookings %}
+                <article class="booking-card">
+
+                    <div class="booking-card-top">
+                        <div class="booking-reference">
+                            <span class="booking-label">BOOKING ID</span>
+                            <h3>#{{ booking.id }}</h3>
+                        </div>
+
+                        <span class="status-badge
+                            {% if booking.status == 'CONFIRMED' %}
+                                status-confirmed
+                            {% elif booking.status == 'PENDING' %}
+                                status-pending
+                            {% elif booking.status == 'CANCELLED' %}
+                                status-cancelled
+                            {% elif booking.status == 'COMPLETED' %}
+                                status-completed
+                            {% endif %}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="booking-details">
+
+                        <div class="detail-item">
+                            <span class="detail-label">PARKING FLOOR</span>
+                            <strong>{{ booking.slot.floor.name }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">SLOT NUMBER</span>
+                            <strong>{{ booking.slot.slot_number }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">VEHICLE NUMBER</span>
+                            <strong>{{ booking.vehicle_number }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">START TIME</span>
+                            <strong>{{ booking.start_time|date:"d M Y, h:i A" }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">END TIME</span>
+                            <strong>{{ booking.end_time|date:"d M Y, h:i A" }}</strong>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">PAYMENT STATUS</span>
+
+                            {% if booking.payment %}
+                                <strong class="payment-status">
+                                    {{ booking.payment.get_status_display }}
+                                </strong>
+
+                                <span class="payment-amount">
+                                    ₹{{ booking.payment.total_amount|default:booking.payment.parking_fee }}
+                                </span>
+                            {% else %}
+                                <strong class="payment-status">Not available</strong>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="booking-actions">
+
+                        {% if booking.status == 'CONFIRMED' %}
+                            <form method="POST"
+                                  action="{% url 'cancel_booking' booking.id %}"
+                                  onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                {% csrf_token %}
+                                <button type="submit" class="cancel-button">
+                                    Cancel Booking
+                                </button>
+                            </form>
+                        {% elif booking.status == 'PENDING' %}
+                            <span class="action-note">
+                                Payment or confirmation is pending.
+                            </span>
+                        {% elif booking.status == 'CANCELLED' %}
+                            <span class="action-note">
+                                This booking has been cancelled.
+                            </span>
+                        {% elif booking.status == 'COMPLETED' %}
+                            <span class="action-note">
+                                Parking session completed.
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <div class="empty-state">
+                    <div class="empty-icon">P</div>
+                    <h3>No bookings yet</h3>
+                    <p>
+                        Your parking reservations will appear here
+                        after you book a slot.
+                    </p>
+                    <a href="{% url 'parking_slots' %}" class="primary-link">
+                        Explore Parking Slots
+                    </a>
+                </div>
+            {% endfor %}
+
+        </section>
+
+        <footer class="bookings-footer">
+            <span>PARKEASE © 2026</span>
+            <span>SMART MALL PARKING PLATFORM</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>

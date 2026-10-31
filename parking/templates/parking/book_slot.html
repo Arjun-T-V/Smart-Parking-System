@@ -1,0 +1,192 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARKEASE | Book Parking</title>
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/book_slot.css' %}">
+</head>
+
+<body class="booking-page">
+
+    <header class="booking-header">
+        <a href="{% url 'dashboard' %}" class="brand">
+            <span class="brand-mark">P.</span>
+            <span>PARKEASE</span>
+        </a>
+
+        <nav class="booking-nav">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'parking_slots' %}">Parking Slots</a>
+            <a href="{% url 'my_bookings' %}">My Bookings</a>
+        </nav>
+    </header>
+
+    <main class="booking-main">
+
+        <section class="booking-intro">
+            <p class="eyebrow">RESERVATION SYSTEM / 04</p>
+            <h1>Your space.<br><span>Your schedule.</span></h1>
+            <p>Choose your parking slot, select your vehicle and schedule your visit.</p>
+        </section>
+
+        {% if success %}
+            <div class="booking-alert" role="status">{{ success }}</div>
+        {% endif %}
+
+        {% if error %}
+            <div class="booking-alert booking-alert-error" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <div class="booking-layout">
+
+            <section class="booking-form-card">
+                <div class="booking-card-heading">
+                    <span class="step-number">01</span>
+                    <div>
+                        <h2>Booking details</h2>
+                        <p>Enter the details for your reservation.</p>
+                    </div>
+                </div>
+
+                <form method="POST" class="reservation-form">
+                    {% csrf_token %}
+
+                    <div class="booking-field">
+                        <label for="slot">Parking slot</label>
+                        <select name="slot" id="slot" required>
+                            {% for slot in slots %}
+                                <option value="{{ slot.id }}"
+                                    {% if slot.id|stringformat:"s" == selected_slot_id %}selected{% endif %}>
+                                    {{ slot.floor.name }} — Slot {{ slot.slot_number }}
+                                </option>
+                            {% empty %}
+                                <option value="">No slots available</option>
+                            {% endfor %}
+                        </select>
+                        <span class="field-hint">Choose an available parking space.</span>
+                    </div>
+
+                    <div class="booking-field">
+                        <label for="vehicle_id">Your vehicle</label>
+                        <select name="vehicle_id" id="vehicle_id" required>
+                            <option value="">Select a registered vehicle</option>
+                            {% for vehicle in vehicles %}
+                                <option value="{{ vehicle.id }}"
+                                    {% if vehicle.id|stringformat:"s" == selected_vehicle_id %}selected{% endif %}>
+                                    {{ vehicle.vehicle_number }} — {{ vehicle.get_vehicle_type_display }}
+                                </option>
+                            {% empty %}
+                                <option value="">No registered vehicles</option>
+                            {% endfor %}
+                        </select>
+
+                        {% if not vehicles %}
+                            <span class="field-hint">
+                                You need to register a vehicle before booking.
+                                <a href="{% url 'my_vehicles' %}">Add a vehicle ↗</a>
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="booking-time-grid">
+                        <div class="booking-field">
+                            <label for="start_time">Arrival time</label>
+                            <input type="datetime-local"
+                                   id="start_time"
+                                   name="start_time"
+                                   value="{{ start_time }}"
+                                   required>
+                        </div>
+
+                        <div class="booking-field">
+                            <label for="end_time">Departure time</label>
+                            <input type="datetime-local"
+                                   id="end_time"
+                                   name="end_time"
+                                   value="{{ end_time }}"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="booking-notice">
+                        <span class="notice-symbol">i</span>
+                        <p>
+                            Your reservation is confirmed only after successful payment.
+                            Failed demo payments cancel the pending booking.
+                        </p>
+                    </div>
+
+                    <button type="submit"
+                            class="booking-submit"
+                            {% if not slots or not vehicles %}disabled{% endif %}>
+                        <span>Continue to Payment</span>
+                        <span>→</span>
+                    </button>
+
+                    <p class="demo-note">
+                        DEMO PAYMENT · NO REAL MONEY CHARGED
+                    </p>
+                </form>
+            </section>
+
+            <aside class="booking-info">
+                <div class="info-topline">
+                    <span class="eyebrow">HOW IT WORKS</span>
+                    <span class="info-symbol">P.</span>
+                </div>
+
+                <h2>Three steps.<br>One less worry.</h2>
+
+                <div class="booking-step">
+                    <span>01</span>
+                    <div>
+                        <h3>Select</h3>
+                        <p>Choose your parking slot and registered vehicle.</p>
+                    </div>
+                </div>
+
+                <div class="booking-step">
+                    <span>02</span>
+                    <div>
+                        <h3>Schedule</h3>
+                        <p>Enter your expected arrival and departure times.</p>
+                    </div>
+                </div>
+
+                <div class="booking-step">
+                    <span>03</span>
+                    <div>
+                        <h3>Pay and confirm</h3>
+                        <p>Complete the demo payment to confirm your reservation.</p>
+                    </div>
+                </div>
+
+                <div class="pricing-note">
+                    <p class="eyebrow">PARKING RATE</p>
+                    <p class="price">₹30 <span>/ 30 minutes</span></p>
+                    <p>Each started 30-minute block is charged at ₹30.</p>
+                </div>
+            </aside>
+
+        </div>
+
+        <a href="{% url 'parking_slots' %}" class="back-link">
+            ← Back to parking slots
+        </a>
+
+    </main>
+
+    <footer class="booking-footer">
+        <span>PARKEASE © 2026</span>
+        <span>SMART MALL PARKING PLATFORM</span>
+        <span>RESERVATION / 04</span>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* admin_bookings.css — Cyber-Telemetry (ab- prefix) */
+
+.ab-topbar-right { display: flex; align-items: center; gap: 20px; }
+
+.ab-admin-label {
+    padding: 5px 12px;
+    border: 1px solid rgba(6, 182, 212, 0.45);
+    border-radius: 6px;
+    background: var(--cyan-soft);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--cyan-hi);
+}
+
+.ab-user { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600; }
+
+.ab-avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(6, 182, 212, 0.55);
+    border-radius: 50%;
+    background: var(--cyan-soft);
+    color: var(--cyan-hi);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.ab-container { width: var(--wrap); margin: 0 auto; padding: 28px 0 0; }
+
+/* ---------- Breadcrumb & heading ---------- */
+
+.ab-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    color: var(--faint);
+}
+
+.ab-breadcrumb a { transition: color 0.2s; }
+.ab-breadcrumb a:hover { color: var(--cyan-hi); }
+.ab-breadcrumb span:last-child { color: var(--text); }
+
+.ab-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 28px;
+}
+
+.ab-heading h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); letter-spacing: -0.05em; }
+.ab-heading p:last-child { max-width: 52ch; margin-top: 12px; color: var(--muted); }
+.ab-back-link { min-height: 44px; font-size: 0.9rem; }
+
+/* ---------- Search ---------- */
+
+.ab-search-panel { margin-top: 36px; padding: 28px; border-radius: 20px; }
+
+.ab-search-heading { margin-bottom: 20px; }
+.ab-search-heading h2 { font-size: 1.45rem; }
+.ab-search-icon { font-size: 1.6rem; line-height: 1; color: var(--cyan); text-shadow: 0 0 16px var(--cyan-glow); }
+
+.ab-search-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
+.ab-search-field { flex: 1 1 320px; }
+.ab-search-button, .ab-clear-button { min-height: 50px; }
+
+/* ---------- Results ---------- */
+
+.ab-results-section { margin-top: 48px; }
+
+.ab-booking-card { margin-bottom: 14px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+.ab-booking-card:hover { border-color: rgba(6, 182, 212, 0.4); box-shadow: 0 0 16px rgba(6, 182, 212, 0.12); }
+
+.ab-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(10, 16, 32, 0.45);
+}
+
+.ab-card-heading h3 { margin-top: 2px; font-size: 1.45rem; }
+
+.ab-booking-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 24px;
+    padding: 22px 24px;
+}
+
+.ab-detail { min-width: 0; }
+.ab-detail strong { display: block; margin-top: 4px; font-size: 0.98rem; font-weight: 700; overflow-wrap: anywhere; }
+
+.ab-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 24px;
+    border-top: 1px dashed var(--line-strong);
+}
+
+.ab-card-actions > span {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: var(--faint);
+}
+
+.ab-cancel-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 18px;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    border-radius: var(--r);
+    background: transparent;
+    color: #f87171;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+.ab-cancel-button:hover { background: var(--bad); box-shadow: 0 0 18px var(--bad-glow); color: #fff; }
+
+.ab-empty-state .ab-search-button { margin-top: 24px; }
+
+.ab-footer { margin-top: 64px; padding-left: 0; padding-right: 0; }
+
+@media (max-width: 760px) {
+    .ab-booking-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ab-admin-label { display: none; }
+}
+
+@media (max-width: 480px) {
+    .ab-booking-grid { grid-template-columns: 1fr; gap: 16px; }
+    .ab-card-heading, .ab-booking-grid, .ab-card-actions { padding-left: 18px; padding-right: 18px; }
+    .ab-search-panel { padding: 20px; }
+    .ab-search-button, .ab-clear-button { flex: 1; }
+}

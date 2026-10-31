@@ -1,0 +1,297 @@
+/* parking_slots.css — Cyber-Telemetry
+   Each floor is a vector-grid blueprint; each slot is a glowing node whose
+   border colour is its state: emerald free, crimson occupied, amber reserved. */
+
+.parking-main {
+    width: var(--wrap);
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 64px) 0 clamp(40px, 6vw, 72px);
+}
+
+/* ---------- Hero ---------- */
+
+.parking-hero h1 { font-size: clamp(2.6rem, 6vw, 4.8rem); line-height: 1; letter-spacing: -0.05em; }
+.parking-hero h1 span { display: inline-block; }
+
+.hero-description { max-width: 46ch; margin-top: 20px; font-size: 1.08rem; color: var(--muted); }
+
+.parking-system-status {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 8px 14px;
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    border-radius: 6px;
+    background: var(--ok-soft);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--ok);
+}
+
+.status-separator { color: var(--faint); }
+
+/* ---------- Panels ---------- */
+
+.availability-panel {
+    margin-top: 40px;
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: 20px;
+}
+
+.section-topline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.section-index { font-size: 0.9rem; color: var(--cyan); text-shadow: 0 0 14px var(--cyan-glow); }
+
+.availability-panel h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.panel-description { max-width: 52ch; margin: 8px 0 24px; color: var(--muted); }
+
+.availability-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+    gap: 16px;
+}
+
+.parking-error { margin-top: 16px; }
+
+/* ---------- Floors section ---------- */
+
+.slots-section { margin-top: clamp(56px, 8vw, 88px); }
+
+/* Next availability readout */
+.next-availability-panel { margin-top: 0; margin-bottom: 20px; }
+
+.next-availability-panel h3 {
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    color: var(--ok);
+    text-shadow: 0 0 22px var(--ok-glow);
+}
+
+.mini-label { margin-bottom: 6px; }
+
+.prediction-time {
+    font-size: clamp(3.6rem, 9vw, 6rem);
+    color: var(--cyan-hi);
+    text-shadow: 0 0 30px var(--cyan-glow);
+}
+
+.prediction-time span {
+    margin-left: 6px;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--muted);
+    text-shadow: none;
+}
+
+.prediction-caption { max-width: 52ch; margin-top: 10px; color: var(--muted); }
+
+.release-time {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 22px;
+    padding: 12px 18px;
+    border: 1px dashed rgba(6, 182, 212, 0.55);
+    border-radius: var(--r);
+    background: rgba(6, 182, 212, 0.07);
+}
+
+.release-time span {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.release-time strong { font-family: var(--font-display); font-size: 1.4rem; color: var(--text); }
+
+/* ---------- Floor blueprint ---------- */
+
+.floor-panel {
+    position: relative;
+    margin-top: 28px;
+    padding: clamp(18px, 3vw, 28px);
+    border: 1px solid var(--line-strong);
+    border-radius: 20px;
+    background:
+        linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+        rgba(10, 16, 32, 0.7);
+}
+
+/* corner registration marks */
+.floor-panel::before,
+.floor-panel::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--cyan);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.floor-panel::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.floor-panel::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+.floor-heading { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+
+.floor-number {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid rgba(6, 182, 212, 0.6);
+    border-radius: 14px;
+    background: var(--cyan-soft);
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.25);
+    color: var(--cyan-hi);
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.floor-heading h3 { font-size: 1.4rem; }
+.floor-heading p { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--muted); }
+
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+}
+
+/* ---------- Slot node ---------- */
+
+.slot-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(30, 41, 59, 0.88);
+    transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s var(--ease);
+}
+
+.slot-card:has(.status-available) {
+    border-color: rgba(16, 185, 129, 0.7);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.28), inset 0 0 18px rgba(16, 185, 129, 0.05);
+}
+
+.slot-card:has(.status-unavailable) {
+    border-color: rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3), inset 0 0 18px rgba(239, 68, 68, 0.05);
+}
+
+.slot-card:has(.status-reserved) {
+    border-color: rgba(245, 158, 11, 0.7);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3), inset 0 0 18px rgba(245, 158, 11, 0.05);
+}
+
+.slot-card:has(.status-available):hover { box-shadow: 0 0 22px rgba(16, 185, 129, 0.5); transform: translateY(-2px); }
+.slot-card:has(.status-unavailable):hover { box-shadow: 0 0 22px rgba(239, 68, 68, 0.5); }
+.slot-card:has(.status-reserved):hover { box-shadow: 0 0 22px rgba(245, 158, 11, 0.5); }
+
+.slot-card-top { display: flex; align-items: center; justify-content: space-between; }
+
+.slot-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--faint);
+}
+
+.slot-card:has(.status-available) .slot-indicator { background: var(--ok); box-shadow: 0 0 10px var(--ok-glow); }
+.slot-card:has(.status-unavailable) .slot-indicator { background: var(--bad); box-shadow: 0 0 10px var(--bad-glow); }
+.slot-card:has(.status-reserved) .slot-indicator { background: var(--warn); box-shadow: 0 0 10px var(--warn-glow); }
+
+.slot-card h4 { font-size: 2.3rem; }
+
+.slot-status {
+    align-self: flex-start;
+    padding: 5px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    background: rgba(148, 163, 184, 0.08);
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.status-available { background: var(--ok-soft); border-color: rgba(16, 185, 129, 0.5); color: var(--ok); }
+.status-unavailable { background: var(--bad-soft); border-color: rgba(239, 68, 68, 0.5); color: #f87171; }
+.status-reserved { background: var(--warn-soft); border-color: rgba(245, 158, 11, 0.5); color: var(--warn); }
+.status-unknown { background: rgba(148, 163, 184, 0.08); color: var(--muted); }
+
+.slot-book-button {
+    width: 100%;
+    min-height: 40px;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 0.86rem;
+}
+
+.sensor-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-strong);
+}
+
+.sensor-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(6, 182, 212, 0.45);
+    border-radius: 8px;
+    background: var(--cyan-soft);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--cyan-hi);
+}
+
+.mini-label { font-size: 0.6rem; }
+.sensor-value { font-size: 0.86rem; font-weight: 600; color: var(--text); }
+.next-availability-panel .sensor-value { font-size: 1rem; color: var(--muted); }
+
+.empty-message {
+    grid-column: 1 / -1;
+    padding: 24px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 14px;
+    color: var(--muted);
+    text-align: center;
+}
+
+.empty-floors { margin-top: 32px; }
+.parking-back { margin-top: 56px; }
+
+@media (max-width: 760px) {
+    .availability-form { grid-template-columns: 1fr; }
+    .search-button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .slot-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,211 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PARKEASE | Demo Checkout</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/payment_checkout.css' %}">
+</head>
+
+<body class="checkout-page">
+
+    <nav class="checkout-nav">
+        <a href="{% url 'dashboard' %}" class="checkout-brand">
+            <span class="brand-mark">P</span>
+            PARKEASE<span class="brand-dot">.</span>
+        </a>
+
+        <div class="checkout-nav-right">
+            <span class="secure-indicator">
+                <span></span> DEMO CHECKOUT
+            </span>
+            <a href="{% url 'my_bookings' %}">My Bookings ↗</a>
+        </div>
+    </nav>
+
+    <main class="checkout-container">
+
+        <div class="checkout-heading">
+            <p class="eyebrow">RESERVATION PAYMENT</p>
+            <h1>Parking Checkout<span>.</span></h1>
+            <p>Review your reservation and simulate a payment result.</p>
+        </div>
+
+        <div class="demo-notice">
+            <span class="notice-symbol">i</span>
+            <div>
+                <strong>Demo payment mode</strong>
+                <p>
+                    This is a demonstration only. No real money is charged
+                    and no real payment gateway is connected.
+                </p>
+            </div>
+        </div>
+
+        <div class="checkout-layout">
+
+            <section class="checkout-booking-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">RESERVATION SUMMARY</p>
+                        <h2>Booking Details</h2>
+                    </div>
+
+                    <span class="booking-id">#{{ booking.id }}</span>
+                </div>
+
+                <div class="booking-location">
+                    <div class="location-icon">P</div>
+                    <div>
+                        <span class="detail-label">PARKING LOCATION</span>
+                        <h3>{{ booking.slot.floor.name }}</h3>
+                        <p>Slot {{ booking.slot.slot_number }}</p>
+                    </div>
+                </div>
+
+                <div class="checkout-details">
+                    <div class="checkout-detail-row">
+                        <span>Vehicle registration</span>
+                        <strong>{{ booking.vehicle_number }}</strong>
+                    </div>
+
+                    <div class="checkout-detail-row">
+                        <span>Start time</span>
+                        <strong>{{ booking.start_time|date:"d M Y, h:i A" }}</strong>
+                    </div>
+
+                    <div class="checkout-detail-row">
+                        <span>End time</span>
+                        <strong>{{ booking.end_time|date:"d M Y, h:i A" }}</strong>
+                    </div>
+
+                    <div class="checkout-detail-row">
+                        <span>Booking status</span>
+                        <strong>{{ booking.get_status_display }}</strong>
+                    </div>
+                </div>
+
+                <div class="booking-reference-note">
+                    <span class="reference-dot"></span>
+                    Keep your booking ID for reference.
+                </div>
+            </section>
+
+            <section class="checkout-payment-panel">
+                <p class="eyebrow">BILLING SUMMARY</p>
+                <h2>Payment Details</h2>
+
+                <div class="payment-status-row">
+                    <span>PAYMENT STATUS</span>
+
+                    <span class="payment-status-badge
+                        {% if payment.status == 'PAID' %}
+                            payment-paid
+                        {% elif payment.status == 'FAILED' %}
+                            payment-failed
+                        {% else %}
+                            payment-pending
+                        {% endif %}">
+                        {{ payment.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Parking fee</span>
+                        <strong>₹{{ payment.parking_fee }}</strong>
+                    </div>
+
+                    <div class="price-row">
+                        <span>Overtime fine</span>
+                        <strong>₹{{ payment.overtime_fine }}</strong>
+                    </div>
+                </div>
+
+                <div class="total-row">
+                    <div>
+                        <span>TOTAL AMOUNT</span>
+                        <small>Amount shown in Indian Rupees</small>
+                    </div>
+                    <strong>₹{{ payment.total_amount }}</strong>
+                </div>
+
+                {% if payment.status == 'PENDING' %}
+                    <div class="payment-actions">
+                        <p class="action-heading">SIMULATE PAYMENT RESULT</p>
+
+                        <form method="POST"
+                              action="{% url 'demo_payment_result' booking.id %}">
+                            {% csrf_token %}
+
+                            <button type="submit"
+                                    name="result"
+                                    value="success"
+                                    class="payment-success-button">
+                                <span>✓</span>
+                                Simulate Successful Payment
+                            </button>
+
+                            <button type="submit"
+                                    name="result"
+                                    value="failure"
+                                    class="payment-failure-button">
+                                <span>×</span>
+                                Simulate Failed Payment
+                            </button>
+                        </form>
+
+                        <p class="simulation-note">
+                            Choose one result to test the booking workflow.
+                        </p>
+                    </div>
+
+                {% elif payment.status == 'PAID' %}
+                    <div class="payment-result payment-result-success">
+                        <strong>Payment successful</strong>
+                        <p>
+                            Your demo payment is complete. Check your
+                            bookings page for the reservation status.
+                        </p>
+                    </div>
+
+                {% elif payment.status == 'FAILED' %}
+                    <div class="payment-result payment-result-failed">
+                        <strong>Payment failed</strong>
+                        <p>
+                            This payment was unsuccessful. Check your bookings
+                            page for the current reservation status.
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="payment-disclaimer">
+                    <span>DEMO ENVIRONMENT</span>
+                    <p>
+                        These buttons simulate application outcomes only.
+                        They do not process, transfer, or refund real funds.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="checkout-bottom">
+            <a href="{% url 'my_bookings' %}">← Back to My Bookings</a>
+            <span>PARKEASE / SMART MALL PARKING</span>
+        </div>
+
+        <footer class="checkout-footer">
+            <span>PARKEASE © 2026</span>
+            <span>DEMONSTRATION PAYMENT INTERFACE</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>

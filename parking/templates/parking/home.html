@@ -1,0 +1,248 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PARKEASE | Smart Mall Parking</title>
+
+    <link rel="stylesheet" href="{% static 'parking/css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'parking/css/home.css' %}">
+</head>
+
+<body class="home-page">
+
+    <header class="home-header">
+        <a href="{% url 'home' %}" class="home-brand">
+            <span class="brand-mark">P</span>
+            <span>PARKEASE<span class="brand-dot">.</span></span>
+        </a>
+
+        <nav class="home-nav">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="nav-register">Get Started <span>↗</span></a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero-section">
+            <div class="hero-content">
+
+                <div class="system-label">
+                    <span class="status-dot"></span>
+                    SMART PARKING PLATFORM
+                    <span class="label-divider">/</span>
+                    SYSTEM ONLINE
+                </div>
+
+                <h1>
+                    Parking,<br>
+                    <span class="hero-outline">without</span><br>
+                    the hassle<span class="hero-period">.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Find your spot. Reserve in seconds. Park with confidence.
+                    A smarter way to manage parking inside your shopping mall.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{% url 'register' %}" class="hero-primary">
+                        Get Started <span>↗</span>
+                    </a>
+
+                    <a href="{% url 'login' %}" class="hero-secondary">
+                        Sign In <span>→</span>
+                    </a>
+                </div>
+
+                <div class="hero-caption">
+                    <span>01 / SMARTER PARKING</span>
+                    <span>BUILT FOR EVERY JOURNEY</span>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="visual-topline">
+                    <span>LIVE PARKING OVERVIEW</span>
+                    <span class="live-indicator"><span></span> SYSTEM READY</span>
+                </div>
+
+                <div class="parking-graphic">
+                    <div class="parking-grid-lines"></div>
+
+                    <div class="parking-symbol">P<span>.</span></div>
+
+                    <div class="parking-slot slot-a">
+                        <span>A01</span>
+                        <div class="mini-car"></div>
+                        <small>AVAILABLE</small>
+                    </div>
+
+                    <div class="parking-slot slot-b">
+                        <span>A02</span>
+                        <div class="mini-car occupied-car"></div>
+                        <small>OCCUPIED</small>
+                    </div>
+
+                    <div class="parking-slot slot-c">
+                        <span>A03</span>
+                        <div class="mini-car"></div>
+                        <small>AVAILABLE</small>
+                    </div>
+
+                    <div class="parking-slot slot-d">
+                        <span>A04</span>
+                        <div class="mini-car"></div>
+                        <small>AVAILABLE</small>
+                    </div>
+
+                    <div class="graphic-coordinate">MALL PARKING / LEVEL 01</div>
+                    <div class="graphic-ring ring-one"></div>
+                    <div class="graphic-ring ring-two"></div>
+                </div>
+
+                <div class="visual-footer">
+                    <div>
+                        <span class="metric-label">PLATFORM</span>
+                        <strong>PARKEASE</strong>
+                    </div>
+                    <div>
+                        <span class="metric-label">TECHNOLOGY</span>
+                        <strong>IoT + ML</strong>
+                    </div>
+                    <div>
+                        <span class="metric-label">INTERFACE</span>
+                        <strong>REAL-TIME READY</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="system-strip" aria-label="Platform capabilities">
+            <div class="strip-item">
+                <span class="strip-index">01</span>
+                <span>SMART SLOT BOOKING</span>
+            </div>
+            <div class="strip-item">
+                <span class="strip-index">02</span>
+                <span>IoT OCCUPANCY TRACKING</span>
+            </div>
+            <div class="strip-item">
+                <span class="strip-index">03</span>
+                <span>ML-BASED PREDICTIONS</span>
+            </div>
+            <div class="strip-item">
+                <span class="strip-index">04</span>
+                <span>BOOKING MANAGEMENT</span>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="section-intro">
+                <div>
+                    <p class="eyebrow">DESIGNED FOR CONVENIENCE</p>
+                    <h2>Less searching.<br>More <span>shopping.</span></h2>
+                </div>
+
+                <p class="section-description">
+                    Everything you need for a smoother parking experience,
+                    brought together in one platform.
+                </p>
+            </div>
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+                    <div class="feature-number">01</div>
+                    <div class="feature-icon" aria-hidden="true">↗</div>
+                    <h3>Reserve Your Spot</h3>
+                    <p>
+                        Browse parking slots and reserve an available space
+                        before you arrive.
+                    </p>
+                    <span class="feature-tag">EASY BOOKING</span>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-number">02</div>
+                    <div class="feature-icon" aria-hidden="true">◉</div>
+                    <h3>IoT Slot Monitoring</h3>
+                    <p>
+                        Sensor integration helps report vehicle presence
+                        and parking session activity.
+                    </p>
+                    <span class="feature-tag">SENSOR CONNECTED</span>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-number">03</div>
+                    <div class="feature-icon" aria-hidden="true">⌁</div>
+                    <h3>Predictive Insights</h3>
+                    <p>
+                        Explore experimental ML estimates of when an occupied
+                        parking space may become available.
+                    </p>
+                    <span class="feature-tag">ML EXPERIMENTAL</span>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-number">04</div>
+                    <div class="feature-icon" aria-hidden="true">▤</div>
+                    <h3>One Parking Dashboard</h3>
+                    <p>
+                        Manage your vehicles, review reservations and
+                        track booking and payment statuses.
+                    </p>
+                    <span class="feature-tag">ALL IN ONE PLACE</span>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="workflow-section" id="how-it-works">
+            <div class="workflow-heading">
+                <p class="eyebrow">A SIMPLER WAY TO PARK</p>
+                <h2>Three steps.<br><span>One smooth experience.</span></h2>
+            </div>
+
+            <div class="workflow-steps">
+                <article class="workflow-step">
+                    <span class="step-number">01</span>
+                    <h3>Create an account</h3>
+                    <p>Sign up and register your vehicle details.</p>
+                </article>
+
+                <article class="workflow-step">
+                    <span class="step-number">02</span>
+                    <h3>Choose a slot</h3>
+                    <p>Check availability and select your parking time.</p>
+                </article>
+
+                <article class="workflow-step">
+                    <span class="step-number">03</span>
+                    <h3>Confirm your booking</h3>
+                    <p>Complete the checkout flow and review your reservation.</p>
+                </article>
+            </div>
+
+            <a href="{% url 'register' %}" class="workflow-cta">
+                Start your parking journey <span>↗</span>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="home-footer">
+        <a href="{% url 'home' %}" class="footer-brand">PARKEASE<span>.</span></a>
+        <p>SMART MALL PARKING PLATFORM</p>
+        <span>© 2026 PARKEASE. ALL RIGHTS RESERVED.</span>
+    </footer>
+
+</body>
+</html>

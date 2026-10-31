@@ -1,0 +1,233 @@
+/* occupancy_report.css — Cyber-Telemetry
+   Heatmap-style meters that grow in once on load. Colour = slot state. */
+
+.occupancy-topbar-right { display: flex; align-items: center; gap: 16px; }
+
+.admin-label {
+    padding: 5px 12px;
+    border: 1px solid rgba(6, 182, 212, 0.45);
+    border-radius: 6px;
+    background: var(--cyan-soft);
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--cyan-hi);
+}
+
+.dashboard-link { font-size: 0.9rem; font-weight: 700; color: var(--cyan-hi); }
+.dashboard-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.occupancy-container { width: var(--wrap); margin: 0 auto; padding: clamp(28px, 4vw, 48px) 0 0; }
+
+/* ---------- Heading ---------- */
+
+.occupancy-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.occupancy-heading h1 { font-size: clamp(2.4rem, 5vw, 3.9rem); letter-spacing: -0.05em; }
+.occupancy-heading p:last-child { max-width: 54ch; margin-top: 12px; color: var(--muted); }
+
+.report-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    border-radius: 6px;
+    background: var(--ok-soft);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    color: var(--ok);
+}
+
+/* ---------- Overall stats ---------- */
+
+.overall-section { margin-top: 48px; }
+
+.occupancy-stats-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+
+.occupancy-stat-card { position: relative; overflow: hidden; padding: 20px 20px 24px; }
+
+.occupancy-stat-card > strong { display: block; margin: 16px 0 6px; font-size: 2.8rem; }
+.stat-description { font-size: 0.82rem; color: var(--muted); }
+
+.stat-line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 28%;
+    height: 2px;
+    background: var(--faint);
+}
+
+/* total = cyan, available = emerald, occupied = crimson, reserved = amber */
+.occupancy-stat-card:nth-child(2) > strong { color: var(--ok); text-shadow: 0 0 22px var(--ok-glow); }
+.occupancy-stat-card:nth-child(2) .stat-line { background: var(--ok); box-shadow: 0 0 12px var(--ok-glow); }
+.occupancy-stat-card:nth-child(3) > strong { color: #f87171; text-shadow: 0 0 22px var(--bad-glow); }
+.occupancy-stat-card:nth-child(3) .stat-line { background: var(--bad); box-shadow: 0 0 12px var(--bad-glow); }
+.occupancy-stat-card:nth-child(4) > strong { color: var(--warn); text-shadow: 0 0 22px var(--warn-glow); }
+.occupancy-stat-card:nth-child(4) .stat-line { background: var(--warn); box-shadow: 0 0 12px var(--warn-glow); }
+
+.stat-total > strong { color: var(--cyan-hi); text-shadow: 0 0 26px var(--cyan-glow); }
+.stat-total .stat-line { width: 100%; background: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
+
+/* ---------- Utilization ---------- */
+
+.occupancy-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: clamp(24px, 5vw, 56px);
+    margin-top: 40px;
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: 20px;
+}
+
+.summary-copy h2 { font-size: 1.65rem; }
+.summary-copy > p:last-child { margin-top: 8px; color: var(--muted); }
+
+.meter-value { display: flex; align-items: baseline; gap: 12px; }
+.meter-value strong { font-size: clamp(3rem, 6vw, 4.5rem); color: var(--cyan-hi); text-shadow: 0 0 30px var(--cyan-glow); }
+.meter-value span { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; color: var(--muted); }
+
+.meter-track,
+.floor-meter-track {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--field);
+}
+
+.meter-track { height: 14px; margin-top: 16px; }
+.floor-meter-track { height: 10px; margin: 20px 0; }
+
+/* segment ticks every 10% */
+.meter-track::after,
+.floor-meter-track::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent calc(10% - 1px), rgba(15, 23, 42, 0.85) calc(10% - 1px), rgba(15, 23, 42, 0.85) 10%);
+    pointer-events: none;
+}
+
+.meter-fill,
+.floor-meter-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--ok), var(--cyan) 70%, var(--cyan-hi));
+    box-shadow: 0 0 14px var(--cyan-glow);
+    transform-origin: left center;
+    animation: meter-grow 1s var(--ease) both;
+}
+
+@keyframes meter-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+.meter-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--faint);
+}
+
+/* ---------- Floors ---------- */
+
+.floor-section { margin-top: clamp(56px, 8vw, 80px); }
+
+.floor-report-list { display: grid; gap: 16px; }
+
+.floor-report-card {
+    position: relative;
+    padding: 24px;
+    border-color: var(--line-strong);
+    background:
+        linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px) 0 0 / 28px 28px,
+        linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px) 0 0 / 28px 28px,
+        rgba(30, 41, 59, 0.9);
+}
+
+.floor-report-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.floor-title-group { display: flex; align-items: center; gap: 14px; }
+
+.floor-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(6, 182, 212, 0.55);
+    border-radius: var(--r);
+    background: var(--cyan-soft);
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.22);
+    color: var(--cyan-hi);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.floor-title-group h3 { font-size: 1.3rem; }
+
+.floor-occupancy-value { text-align: right; }
+.floor-occupancy-value strong { display: block; font-size: 2.2rem; color: var(--cyan-hi); }
+.floor-occupancy-value span { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.12em; color: var(--muted); }
+
+.floor-stats-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+
+.floor-stat {
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: rgba(10, 16, 32, 0.6);
+}
+
+.floor-stat span {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.floor-stat strong { font-family: var(--font-display); font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+
+.floor-stat:nth-child(2) { border-color: rgba(16, 185, 129, 0.4); }
+.floor-stat:nth-child(2) strong { color: var(--ok); }
+.floor-stat:nth-child(3) { border-color: rgba(239, 68, 68, 0.4); }
+.floor-stat:nth-child(3) strong { color: #f87171; }
+.floor-stat:nth-child(4) { border-color: rgba(245, 158, 11, 0.4); }
+.floor-stat:nth-child(4) strong { color: var(--warn); }
+
+.occupancy-empty a { display: inline-block; margin-top: 20px; font-weight: 700; color: var(--cyan-hi); }
+.occupancy-empty a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.occupancy-footer { margin-top: 64px; padding-left: 0; padding-right: 0; }
+.occupancy-footer a { color: var(--cyan-hi); }
+
+@media (max-width: 1100px) {
+    .occupancy-stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stat-total { grid-column: 1 / -1; }
+}
+
+@media (max-width: 860px) {
+    .occupancy-summary { grid-template-columns: 1fr; }
+    .floor-stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+    .occupancy-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .floor-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .admin-label { display: none; }
+    .floor-report-card { padding: 20px; }
+}
